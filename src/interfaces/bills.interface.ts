@@ -3,7 +3,6 @@ export interface Task {
    lable: string;
    amount: number;
    createdAt: string;
-   history: object;
    isDeleted: boolean;
 
 }

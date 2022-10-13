@@ -16,16 +16,13 @@ const billSchema: Schema = new Schema({
      type:String,
      default: format(Date.now(), 'yyyy-MM-dd')
     },
-    history: [
-        {
-            type: Object
-        }
-    ],
     isDeleted: {
         type: Boolean,
         default: false
     },
-});
+}
+// { timestamps: true }
+);
 
 
 const billModel = model<Task & Document>('Bill', billSchema);
