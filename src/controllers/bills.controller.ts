@@ -136,8 +136,3 @@ private billServices = new BillService();
 }
 
 export default BillController;
-// meta: {
-//   next_page: page_no + 1,
-//   page_size: page_size,
-//   has_more: allTasks.length === page_size,
-// },
