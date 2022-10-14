@@ -1,21 +1,24 @@
 import { Request, Response, NextFunction } from 'express';
 import BillService from '@/services/bills.service';
-import { Task } from '@/interfaces/bills.interface';
+import { Task } from '@/interfaces/controller.interface';
 import { MulterRequest } from '@/interfaces/multer.interface';
+import { nextDay } from 'date-fns';
+import { stream } from '@utils/logger';
 
-/**
+
+class BillController {
+private billServices = new BillService();
+  /**
  * Create Bill controller
  * @param {Request} req
  * @param {Response} res
  * @param {NextFunction} next
  * @returns {Promise<Response>}
  */
-class TaskController {
-  private billServices = new BillService();
 
   public createBill = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
     try {
-      const { lable, amount } = req.body;
+      const { lable, amount }:Task = req.body;
       const createdData: Task = await this.billServices.createData(lable, amount);
       return res.status(201).json(createdData);
     } catch (error) {
@@ -48,8 +51,8 @@ class TaskController {
    */
  public deleteBill = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
     try {
-      const { id } = req.params;
-      const deleteData: Task = await this.billServices.deleteData(id);
+      const tempId:string  = req.params.id;
+      const deleteData: Task = await this.billServices.deleteData(tempId);
       return res.status(200).json(deleteData);
     } catch (err) {
       next(err);
@@ -57,16 +60,16 @@ class TaskController {
   };
  /**
    * searchByText
-   * * @param {Request} req
+   * @param {Request} req
    * @param {Response} res
    * @param {NextFunction} next
    * @returns {Promise<Response>}
    */
   public searchByText = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
     try {
-      const { lable } = req.params;
-      const searchData = await this.billServices.searchData(lable);
-      return res.status(200).json({ success: true, searchData });
+      const  tempLable:string  = req.params.lable;
+      const searchData:Task = await this.billServices.searchData(tempLable);
+      return res.status(200).json(searchData);
     } catch (err) {
       next(err);
     }
@@ -80,7 +83,7 @@ class TaskController {
    */
   public searchByDate = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
     try {
-      const searchData = await this.billServices.searchDate(req.params.from, req.params.to);
+      const searchData:Task[] = await this.billServices.searchDate(req.params.start_date, req.params.end_date);
       return res.status(200).json({ success: true, searchData });
     } catch (err) {
       next(err);
@@ -96,7 +99,7 @@ class TaskController {
   public updateBill = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
     try {
       const id: string = req.params.id;
-      const { lable, amount } = req.body;
+      const { lable, amount }:Task = req.body;
       const updatedValue: Task = await this.billServices.updateBill(id, lable, amount);
       return res.status(200).json(updatedValue);
     } catch (error) {
@@ -119,6 +122,22 @@ class TaskController {
       next(err);
     }
   };
+//delete all data
+// public deletetask = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
+//   try{
+//   const deleted: Task = await this.billServices.deleteAllData();
+//   return res.status(200).json(deleted);
+// } catch(err){
+//   next(err);
+// }
+// }
+
+
 }
 
-export default TaskController;
+export default BillController;
+// meta: {
+//   next_page: page_no + 1,
+//   page_size: page_size,
+//   has_more: allTasks.length === page_size,
+// },

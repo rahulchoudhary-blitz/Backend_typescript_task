@@ -1,10 +1,10 @@
 import billModel from '@models/bill.model';
-import { Task } from '@/interfaces/bills.interface';
+import { Task } from '@/interfaces/controller.interface';
 
-class BillDeo {
+class BillDao {
   public bills = billModel;
   /**
-   * create a new task dao
+   * create a new task 
    * @param lable
    * @param amount
    * @returns {Promise<Task>}
@@ -23,7 +23,7 @@ class BillDeo {
    */
   public getAllData = async (page: number, limit: number): Promise<Task[]> => {
     const skip = page * limit;
-    return await this.bills.find({ isDeleted: false }).limit(limit).skip(skip);
+    return await this.bills.find({ is_deleted: false }).limit(limit).skip(skip).lean()
   };
  /**
    * Delete useing id and delete
@@ -31,7 +31,7 @@ class BillDeo {
    * @returns {Promise<Task>}
    */
   public findAndDelete = async (id: string): Promise<Task> => {
-    return await this.bills.findByIdAndUpdate(id, { isDeleted: true });
+    return await this.bills.findByIdAndUpdate(id, { is_deleted: true }).lean();
   };
  /**
    * search by text
@@ -43,17 +43,17 @@ class BillDeo {
   };
  /**
    * search by date
-   * @param from
+   * @param start_date
    * @param to
    * @returns {Promise<Task[]>}
    */
-  public searchByDate = async (from: string, to: string): Promise<Task[]> => {
+  public searchByDate = async (start_date: string, end_date: string): Promise<Task[]> => {
     return await this.bills.find({
       createdAt: {
-        $gte: from,
-        $lte: to,
+        $gte: start_date,
+        $lte: end_date
       },
-    });
+    }).lean();
   };
   /**
    * update by using id
@@ -63,11 +63,11 @@ class BillDeo {
    * @returns {Promise<Task>}
    */
   public async findAndUpdate(id: string, lable: string, amount: number): Promise<Task> {
-    await this.bills.findByIdAndUpdate(id, {
+    return await this.bills.findByIdAndUpdate(id, {
       lable,
       amount,
-    });
-    return await this.bills.findById(id).lean();
+    },{new:true}
+    ).lean()
   }
   /**
    * upload csv file
@@ -77,6 +77,13 @@ class BillDeo {
   public async storeToDb(data: Object[]): Promise<Task[]> {
     return await this.bills.create(data);
   }
+  //delete all data
+// public async deleteAll():Promise<any>{
+//   return await this.bills.deleteMany()
+// }
+
+ 
 }
 
-export default BillDeo;
+export default BillDao;
+
