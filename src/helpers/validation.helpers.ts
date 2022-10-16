@@ -5,7 +5,7 @@
  * @returns {Boolean} 
  */
 const checkRequiredFields = (lable:string,amount:number)=>{
-    if(!lable|| lable.length<3 || !amount || amount < 1 ){
+    if(lable === ''|| lable.length<1 || !amount || amount < 1 ){
        return true;
     }
     return false;
@@ -15,11 +15,27 @@ const checkRequiredFields = (lable:string,amount:number)=>{
  * @param lable 
  * @returns {Boolean}
  */
-const checkNameLength = (lable:string)=>{
-    if(lable.length >20){
+const checkChar = (str:string)=>{
+	if (str.match("[a-zA-Z]+$")){
         return true
     }
     return false;
 };
 
-export {checkRequiredFields, checkNameLength}
+const checkSpecialChars = (str:string) => {
+	const specialChars = `\`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`;
+	const lable = specialChars.split('').some((specialChars) => {
+		if (str.includes(specialChars)) {
+			return true;
+		}
+		return false;
+	});
+	return lable;
+};
+export {checkRequiredFields, checkSpecialChars, checkChar}
+
+/**
+ * lable--> not no, empty string 
+ * amount --> not string , no < 1, 
+ * 
+ */

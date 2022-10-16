@@ -2,15 +2,15 @@ import BillDao from '@/dao/bill.dao';
 import { Task } from '@/interfaces/controller.interface';
 import billModel from '@models/bill.model';
 
-class BillService {
+class BillsService {
   private BillDao = new BillDao();
   /**
    * create new task service
-   * @param {String} lable
+   * @param {String} lable 
    * @param {number} amount
    * @returns {Promise<Task>}
    */
-  public async createData(lable: string, amount: number): Promise<Task> {
+  public async createData( lable : string, amount : number ): Promise<Task> {
     return await this.BillDao.createBill(lable, amount);
   }
   /**
@@ -20,7 +20,7 @@ class BillService {
    * @param {number} limit
    * @returns {Promise<Task[]>}
    */
-  public async getTask(page: number, limit: number): Promise<Task[]> {
+  public async getTask( page : number, limit : number ): Promise<Task[]> {
     return await this.BillDao.getAllData(page, limit);
   }
   /**
@@ -29,7 +29,7 @@ class BillService {
    * @param {String} id
    * @returns {Promise<Task>}
    */
-  public async deleteData(id: string): Promise<Task> {
+  public async deleteData( id : string ): Promise<Task> {
     return await this.BillDao.findAndDelete(id);
   }
   /**
@@ -38,7 +38,7 @@ class BillService {
    * @param {String} lable
    * @returns {Promise<Task>}
    */
-  public async searchData(lable: string): Promise<Task> {
+  public async searchData( lable : string ): Promise<Task> {
     return await this.BillDao.searchByText(lable);
   }
   /**
@@ -47,7 +47,7 @@ class BillService {
    * @param {String} end_date
    * @returns {Promise<Task>}
    */
-  public async searchDate(start_date: string, end_date: string): Promise<Task[]> {
+  public async searchDate( start_date : string, end_date : string ): Promise<Task[]> {
     return await this.BillDao.searchByDate(start_date, end_date);
   }
   /**
@@ -57,7 +57,7 @@ class BillService {
    * @param {Number} amount
    * @returns {Promise<Task>}
    */
-  public async updateBill(id: string, lable: string, amount: number): Promise<Task> {
+  public async updateBill( id : string, lable : string, amount : number ): Promise<Task> {
     return await this.BillDao.findAndUpdate(id, lable, amount);
   }
   /**
@@ -66,7 +66,7 @@ class BillService {
    * @param {Object} data
    * @returns {Promise<Task[]>}
    */
-  public async createCsv(data: Object[]): Promise<Task[]> {
+  public async createCsv( data : Object[] ): Promise<Task[]> {
     return await this.BillDao.storeToDb(data);
   }
 //delete all
@@ -76,4 +76,4 @@ class BillService {
 
 
 }
-export default BillService;
+export default BillsService;

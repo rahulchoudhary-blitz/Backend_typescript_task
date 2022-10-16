@@ -1,6 +1,6 @@
 import { Request } from "express";
 
 export interface MulterRequest extends Request{
-    file:any,
-    stuctruedTasks:Object[]
+    file : any,
+    stuctruedTasks : Object[]
 }

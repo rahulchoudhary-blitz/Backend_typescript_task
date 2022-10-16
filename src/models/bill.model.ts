@@ -3,24 +3,25 @@ import {model, Schema, Document } from 'mongoose';
 import  { compareAsc, format } from 'date-fns';
 import { Task } from '../interfaces/controller.interface';
 
-const billSchema: Schema = new Schema({
-    lable:{
-        type: String,
-        required: true
+const billSchema : Schema = new Schema({
+    lable :{
+        type : String,
+        required : true
     },
-    amount:{
-        type:Number,
-        require: true
+    amount :{
+        type : Number,
+        require : true
     },
-    created_at:{
-     type:String,
-     default: format(Date.now(), 'yyyy-MM-dd')
+    // createdAt:{
+    //  type:String,
+    //  default: format(Date.now(), 'yyyy-MM-dd')
+    // },
+    is_active :{
+        type : Boolean,
+        default : true
     },
-    is_deleted: {
-        type: Boolean,
-        default: false
-    },
-}
+},
+ {timestamps : true}
 );
 
 

@@ -1,6 +1,6 @@
 import cors from 'cors';
 import express from 'express';
-import hpp from 'hpp';
+// import hpp from 'hpp';
 import { connect, set } from 'mongoose';
 import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS } from '@config';
 import { dbConnection } from '@databases';
@@ -9,9 +9,9 @@ import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
 
 class App {
-  public app: express.Application;
-  public env: string;
-  public port: string | number;
+  public app : express.Application;
+  public env : string;
+  public port : string | number;
 
   constructor(routes: Routes[]) {
     this.app = express();
@@ -46,12 +46,12 @@ class App {
 
   private initializeMiddlewares() {
     this.app.use(cors({ origin: ORIGIN, credentials: CREDENTIALS }));
-    this.app.use(hpp());
+    // this.app.use(hpp());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
   }
 
-  private initializeRoutes(routes: Routes[]) {
+  private initializeRoutes(routes : Routes[]) {
     routes.forEach(route => {
       this.app.use('/', route.router);
     });
