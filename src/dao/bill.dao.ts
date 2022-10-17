@@ -12,7 +12,7 @@ class BillDao {
   public createBill = async (lable : string, amount : number) : Promise<Task> => {
     return await this.bills.create({
       lable: lable,
-      amount: amount,
+      amount: amount
     });
   };
  /**
@@ -21,10 +21,13 @@ class BillDao {
    * @param limit
    * @returns {Promise<Task[]>}
    */
-  public getAllData = async (page : number, limit : number) : Promise<Task[]> => {
-    const skip : number = page * limit;
+  public getAllData = async (page : number, page_size: number) : Promise<Task[]> => {
      //TODO: add {isDeleted:true} for hide deleted docs after change the schema
-    return await this.bills.find({ is_active: true }).limit(limit).skip(skip).lean()
+    return await this.bills.find({ is_active: true })
+    .sort({ createdAt: -1 })
+    .skip((page - 1) * page_size)
+    .limit(page_size)
+    .lean()
   };
  /**
    * Delete useing id and delete
@@ -50,11 +53,11 @@ class BillDao {
    */
   public searchByDate = async (start_date : string, end_date : string) : Promise<Task[]> => {
     return await this.bills.find({
-      createdAt : {
-        $gte : start_date,
-        $lte : end_date
-      },
-    }).lean();
+      timestamp : {
+        $gte : new Date(start_date),
+        $lte : new Date(end_date)
+      }
+     }).lean();
   };
   /**
    * update by using id

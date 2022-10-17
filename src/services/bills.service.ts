@@ -20,8 +20,8 @@ class BillsService {
    * @param {number} limit
    * @returns {Promise<Task[]>}
    */
-  public async getTask( page : number, limit : number ): Promise<Task[]> {
-    return await this.BillDao.getAllData(page, limit);
+  public async getTask( page : number, page_size : number ): Promise<Task[]> {
+    return await this.BillDao.getAllData(page, page_size);
   }
   /**
    * Delete task service

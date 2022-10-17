@@ -11,6 +11,13 @@ import {checkRequiredFields, checkSpecialChars, checkChar } from '@/helpers/vali
 
 
 //Validation middleware
+/**
+ * 
+ * @param req 
+ * @param res 
+ * @param next 
+ * @returns 
+ */
 const validationBill = async (req : Request, res : Response, next : NextFunction) =>{
   const {lable, amount}:Task = req.body;
   if(checkRequiredFields(lable, amount)){
@@ -56,9 +63,16 @@ const validateFile = async (req: MulterRequest, res: Response, next: NextFunctio
      if (!checkRequiredFields) {
         return res.status(401).json({ message: 'All feilds are required' });
       }
-      // if (!checkNameLength) {
-      //    return res.status(401).json({ message: 'Name should not be more than 20 letters  ' });
-      // }
+      if(checkSpecialChars(lable)){
+        return res.status(401).json({message:'lable should not include any special chars'})
+      }
+      if(!checkChar(lable)){
+        return res.status(401).json({message:"lable should not include any number"})
+      }
+      if(checkChar(amount.toString())){
+        return res.status(401).json({message:"amount should not include any char"})
+      }
+     
       const billData: Object = {
         lable,
         amount,
@@ -99,8 +113,3 @@ const validateFile = async (req: MulterRequest, res: Response, next: NextFunctio
   };
 };
 export {validationMiddleware, validationBill, validateFile}
-/**
- * lable--> not no, empty string 
- * amount --> not string , no < 1, 
- * 
- */

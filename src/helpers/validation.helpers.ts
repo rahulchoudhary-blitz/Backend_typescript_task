@@ -11,8 +11,8 @@ const checkRequiredFields = (lable:string,amount:number)=>{
     return false;
 };
 /**
- * check the lable data
- * @param lable 
+ * check the lable and amount data 
+ * @param {String} str 
  * @returns {Boolean}
  */
 const checkChar = (str:string)=>{
@@ -22,6 +22,11 @@ const checkChar = (str:string)=>{
     return false;
 };
 
+/**
+ * check the specialChar included or not
+ * @param {Boolean} str 
+ * @returns {Boolean} 
+ */
 const checkSpecialChars = (str:string) => {
 	const specialChars = `\`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`;
 	const lable = specialChars.split('').some((specialChars) => {
@@ -34,8 +39,3 @@ const checkSpecialChars = (str:string) => {
 };
 export {checkRequiredFields, checkSpecialChars, checkChar}
 
-/**
- * lable--> not no, empty string 
- * amount --> not string , no < 1, 
- * 
- */

@@ -2,17 +2,16 @@ import { Request, Response, NextFunction } from 'express';
 import BillService from '@/services/bills.service';
 import { Task } from '@/interfaces/controller.interface';
 import { MulterRequest } from '@/interfaces/multer.interface';
-// import { nextDay } from 'date-fns';
-// import { stream } from '@utils/logger';
+
 
 
 class BillsController {
 private billServices = new BillService();
   /**
  * Create Bill controller
- * @param {Request} req
- * @param {Response} res
- * @param {NextFunction} next
+ * @param {Request} req includes lable, amount 
+ * @param {Response} res will be an Object of type Task
+ * @param {NextFunction} next will pass erro into errorhandler
  * @returns {Promise<Response>}
  */
 
@@ -28,25 +27,23 @@ private billServices = new BillService();
   };
  /**
    * get all bill data
-   * @param {Request} req->
-   * @param {Response} res
-   * @param {NextFunction} next
+   * @param {Request} req includes page and page_size
+   * @param {Response} res will be an Object of type Task
+   * @param {NextFunction} next will pass erro into errorhandler 
    * @returns {Promise<Response>}
    */
   public getBillData = async (req : any, res : Response, next : NextFunction) : Promise<Response> => {
     try {
-      let page : number = parseInt(req.query.page);
-      console.log(page);
-      
-      let limit : number = parseInt(req.query.limit);
-      const billData : Task[] = await this.billServices.getTask(page, limit);
-      console.log(page, limit);
+      const  page : number = parseInt(req.query.page);
+      const page_size : number = parseInt(req.query.page_size);
+      const billData : Task[] = await this.billServices.getTask(page, page_size);
+      console.log(page, page_size);
       
       return res.status(200).json({billData,
-      meta:{
+      meta :{
         page_no : page + 1,
-        page_size : limit,
-        has_more : billData.length === limit
+        page_size : billData.length,
+        has_more : billData.length === page_size
       }
     });
     } catch (err) {
@@ -55,9 +52,9 @@ private billServices = new BillService();
   };
  /**
    * delete controller
-   * @param {Request} req
-   * @param {Response} res
-   * @param {NextFunction} next
+   * @param {Request} req includes fields as query params and an id
+   * @param {Response} res will be an Object of type Task
+   * @param {NextFunction} next will pass erro into errorhandler
    * @returns {Promise<Response>}
    */
  public deleteBill = async (req : Request, res : Response, next : NextFunction) : Promise<Response> => {
@@ -71,9 +68,9 @@ private billServices = new BillService();
   };
  /**
    * searchByText
-   * @param {Request} req
-   * @param {Response} res
-   * @param {NextFunction} next
+   * @param {Request} req includes fields as query params and an lable
+   * @param {Response} res will be an Object of type Task
+   * @param {NextFunction} next will pass erro into errorhandler
    * @returns {Promise<Response>}
    */
   public searchByText = async (req : Request, res : Response, next : NextFunction) : Promise<Response> => {
@@ -87,9 +84,9 @@ private billServices = new BillService();
   };
  /**
    * searchByDate
-   * @param {Request} req
-   * @param {Response} res
-   * @param {NextFunction} next
+   * @param {Request} req includes start_date, end_date
+   * @param {Response} res will be an Object of type Task
+   * @param {NextFunction} next will pass erro into errorhandler
    * @returns {Promise<Response>}
    */
   public searchByDate = async (req : Request, res : Response, next : NextFunction) : Promise<Response> => {
@@ -102,9 +99,9 @@ private billServices = new BillService();
   };
   /**
    * update the bill controller
-   * @param {Request} req
-   * @param {Response} res
-   * @param {NextFunction} next
+   * @param {Request} req includes lable and amount and query params and an id
+   * @param {Response} res will be an Object of type Task
+   * @param {NextFunction} next will pass erro into errorhandler
    * @returns {Promise<Response>}
    */
   public updateBill = async (req : Request, res : Response, next : NextFunction) : Promise<Response> => {
@@ -119,9 +116,9 @@ private billServices = new BillService();
   };
  /**
    * Csv file data controller
-   * * @param {Request} req
-   * @param {Response} res
-   * @param {NextFunction} next
+   * * @param {Request} req includes stuctruedTasks which is validated and structured to json
+   * @param {Response} res wil be an object of type Task
+   * @param {NextFunction} next will pass erro into errorhandler
    * @returns {Promise<Response>}
    */
   public addDataCsv = async (req : MulterRequest, res : Response, next : NextFunction) : Promise<Response> => {
